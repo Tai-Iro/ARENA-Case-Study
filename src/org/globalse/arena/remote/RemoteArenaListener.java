@@ -1,0 +1,45 @@
+/*
+ * Copyright 2004 (C) Applied Software Engineering--TU Muenchen
+ *                    http://wwwbruegge.in.tum.de
+ *
+ * This file is part of ARENA.
+ *
+ * ARENA is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * ARENA is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with ARENA; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+package org.globalse.arena.remote;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+
+/**
+ * Interface for remote arena listeners, to receive notification events about changes in
+ * leagues, tournaments, rounds, and matches. Note that game moves are not sent
+ * through this interface, but through RemoteMatchListener instead.
+ *
+ * @author Allen Dutoit
+ */
+public interface RemoteArenaListener extends Remote {
+	
+	public void leagueInfoChanged(LeagueInfo leagueInfo) throws RemoteException;
+
+	public void tournamentCreated(TournamentInfo tournamentInfo) throws RemoteException;
+
+	public void tournamentInfoChanged(TournamentInfo tournamentInfo) throws RemoteException;
+
+	public void roundCreated(RoundInfo roundInfo) throws RemoteException;
+	
+	public void matchInfoChanged(MatchInfo match) throws RemoteException;
+
+}
+

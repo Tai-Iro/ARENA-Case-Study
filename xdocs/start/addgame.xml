@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<document>
+	<properties>
+		<title>Getting Started--Developing a New Game</title> 
+		<author email="dutoit@in.tum.de">
+			Allen Dutoit 
+		</author>
+	</properties>
+<body>
+	<section name="Getting Started--Developing a New Game">
+		<p>
+			ARENA allows operators to add games to an arena, without recompilation. In this document, we discuss the minimal steps that need to be taken to develop a new game and to configure an arena so that new leagues, tournaments, and matches can be created using the new game. In particular, we discuss: 
+			<ul>
+				<li>
+					The main <a href="#Classes_and_Interfaces">classes and interfaces</a> that a game developer needs to specialize. 
+				</li>
+				<li>
+					The <a href="#Deployment">location</a> of the instances of these classes in a typical deployment. 
+				</li>
+				<li>
+					The <a href="#Interactions">interactions</a> among these classes during a match. 
+				</li>
+				<li>
+					The <a href="#Configuration">configuration</a> and initialization of these classes. 
+				</li>
+			</ul>
+			This discussion uses the TicTacToe example (see the <a href="../apidocs/org/globalse/arena/ttt/package-summary.html">org.globalse.arena.ttt</a> package). You should already have followed the steps in the page <a href="start.html">Starting ARENA</a> to install ARENA and play a TicTacToe tournament. 
+		</p>
+		<subsection name="Classes and Interfaces">
+			<p>
+				A game usually provides the following classes: 
+				<ul>
+					<li>
+						A concrete game class implementing the <a href="../apidocs/org/globalse/arena/server/Game.html">Game</a> interface. A concrete game is a singleton object residing in the Arena server that specifies basic information about the game, such as the minimum and number of players per match. The concrete game also provides a factory method for creating a new game-specific match. 
+					</li>
+					<li>
+						A concrete match class extending the <a href="../apidocs/org/globalse/arena/server/Match.html">Match</a> abstract class. Instances of this class represent planned matches and matches in progress and reside either in the arena server or the game peer. This class should implement the <code>playMove()</code> and <code>getRanks()</code>methods, defining how the match is played and how to determine the ranking among players after the completion of the match. 
+					</li>
+					<li>
+						A match panel extending the <code>JPanel</code> swing component, to display the current state of the match to spectators and enabling players to specify their moves. Match panels reside in the match front end. There can be many match panels for viewing the same match, usually one for each player and spectator. 
+					</li>
+					<li>
+						A concrete move class implementing the <a href="../apidocs/org/globalse/arena/remote/Move.html">Move</a> interface, defining the attributes exchanged between match front ends and matches for this game. Moves are serializable objects that are used for communication between match panels and matches. 
+					</li>
+					<li>
+						A concrete <a href="../apidocs/org/globalse/arena/remote/MatchPanelFactory.html">MatchPanelFactory</a> creating a match panel for the specified match. 
+					</li>
+				</ul>
+			</p>
+		</subsection>
+		<subsection name="TicTacToe class diagram">
+			<p>
+				The class diagram below give an overview of the implemented TicTacToe classes and their relations to external classes. To reduce complexitiy, attributes and operations are skipped. 
+				A detailed API description can be found in the <a href="../apidocs">Java Documentation</a>
+			</p>
+			<img src="../images/TicTacToeClassDiagram.gif" /> 
+		</subsection>
+		
+		<subsection name="Deployment">
+			<p>
+				The deployment diagram below illustrate the deployment for the Game, Match, and MatchPanel classes for the tic tac toe scenario described in the <a href="start.html">Starting ARENA</a> page. 
+			</p>
+			<img src="../images/deployment.gif" /> 
+			<p>
+				On the ArenaServer, <a href="../apidocs/org/globalse/arena/ttt/TicTacToe.html">TicTacToe</a> is a concrete implementation of the <a href="../apidocs/org/globalse/arena/server/Game.html">Game</a> interface. It is used by the <code>2003 Tournament</code> to create the <code>alice_vs_joe</code> instance of <a href="../apidocs/org/globalse/arena/ttt/TicTacToeMatch.html">TicTacToeMatch</a>, a concrete subclass of <a href="../apidocs/org/globalse/arena/server/Match.html">Match</a>. Instances of <a href="../apidocs/org/globalse/arena/server/League.html">League</a> and <a href="../apidocs/org/globalse/arena/server/Tournament.html">Tournament</a> are also remote objects residing on the ArenaServer, accessible via the remote interfaces <a href="../apidocs/org/globalse/arena/remote/RemoteLeague.html">RemoteLeague</a> and <a href="../apidocs/org/globalse/arena/remote/RemoteTournament.html">RemoteTournament</a>, respectively. 
+			</p>
+			<p>
+			    On the MatchFrontEnds, TicTacToeMatchPanels are views depicting the current state of a particular TicTacToeMatch and provide controls for players to specify their next move. In this example, players <code>alice</code> and <code>joe</code> and spectator <code>bob</code> are all observing the <code>alive_vs_joe</code> TicTacToeMatch. TicTacToeMatchPanels communicate attempted moves to TicTacToeMatch, which validates and records the move and then updates all TicTacToeMatchPanels.
+			</p>
+		</subsection>
+		<subsection name="Interactions">
+		<p>Below are the typical interactions that occur during match creation, match panel creation, and match play. The interactions involving game-specific objects should be implemented by the game developers.</p>
+		<p><b>Tournament launch and match creation.</b> The following interactions occur during Tournament planning and launch:
+        <ol>
+        <li>A LeagueOwner creates a Tournament.</li>
+        <li>Players apply for the Tournament.</li>
+        <li>The LeagueOwner accepts a sufficient number of players and launches the Tournament.</li>
+        <li>The Tournament object requests the associated TournamentStyle (e.g., KnockOutStyle) to plan the first Round</li>
+        <li>The TournamentStyle creates a Round and requests the GamePeerManager to create a number of Matches</li>
+        <li>The GamePeerManager requests the Game associated with the Tournament (e.g., TicTacToe) to create a number of matches; when GamePeers are running, the GamePeerManager forwards the request to GamePeers</li>
+        <li>The LeaguesFrame instances in the MatchFrontEnds are notified about the new Matches</li>
+        </ol>
+        </p>
+		<p><b>MatchPanel creation.</b> The following occurs when a player selects a Match to play in the LeaguesFrame:
+        <ol>
+        <li>The LeaguesFrame requests the MatchPanelFactory for the associated Game (i.e., TicTacToeMatchFactory) and creates a new MatchPanel using the createMatchPanel factory method.</li>
+        <li>The new MatchPanel registers itself as a MatchListener using the <code>join()</code> method on the remote match.</li>
+        <li>The MatchPanel displays the current state of the Match and waits for all other players to join.</li>
+        </ol>
+        </p>
+		<p><b>Match playing and watching.</b>The following occurs when a player attempts a move in the TicTacToeMatchPanel:
+        <ol>
+        <li>The MatchPanel creates a TicTacToeMove object and sends it to the remote match with the <code>playMove()</code> method.</li>
+        <li>The TicTacToeMatch validates and records the move.</li>
+        <li>The TicTacToeMatch updates all MatchListeners by sending them the move object with the <code>movePlayed()</code> method. This includes all TicTacToeMatchPanels corresponding to players and spectators of the Match.</li>
+        <li>Once the Match is completed, the TicTacToeMatch updates all ArenaListeners with the <code>matchInfoChanged()</code> method.</li>
+        <li>The LeagueFrames (which are registered as ArenaListeners) update the display of the Match by displaying the result.</li>
+        </ol>
+        </p>
+		</subsection>
+		<subsection name="Configuration">
+			<p>
+				For the new game to be recognized by the arena, you should update the arena.properties file to provide all the necessary information about the new game. Minimally, this includes adding the name of the concrete game class, implementing the Game interface, to the <code>Games</code> property. Optionally, the name and description of the game can be specified, as well as the match panel factory. If some these properties are not specified, arena will construct default values using the class name. 
+			</p>
+			<source>
+# arena.properties file for TicTacToe and a new custom game 
+Games=org.globalse.arena.ttt.TicTacToe org.myorg.mygame.MyGame
+
+# TicTacToe configuration
+org.globalse.arena.ttt.TicTacToe.name=TicTacToe
+org.globalse.arena.ttt.TicTacToe.description=The classic 2 player 3x3 board game
+org.globalse.arena.ttt.TicTacToe.factory=org.globalse.arena.ttt.TicTacToeMatchPanelFactory
+
+# MyGame configuration
+org.myorg.mygame.MyGame.name=MyGame
+org.myorg.mygame.MyGame.description=This is a simple game I wrote to learn how to use ARENA.
+org.myorg.mygame.MyGame.factory=org.myorg.mygame.MyGameMatchPanelFactory 
+			</source>
+			<p>
+				Before starting the arena server, you should make the game-specific classes available for loading to the arena server, either by adding them to the class path, to the ./arena/dist/lib directory, or to the codebase. 
+			</p>
+		</subsection>
+	</section>
+	</body>
+</document>

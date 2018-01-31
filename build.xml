@@ -1,0 +1,156 @@
+<project name="Arena" default="dist" basedir=".">
+    <description>
+        The Arena build file
+    </description>
+    
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="build" location="classes"/>
+  <property name="dist"  location="dist"/>
+  <property name="debug" value="on"/>
+  <property name="debuglevel" value="lines,vars,source"/>
+  
+  <target name="init">
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+  </target>
+
+  <target name="compile" depends="init"
+        description="compile the source" >
+    <!-- Compile the java code from ${src} into ${build} -->
+    <echo message="Compiling the arena server with debug = ${debug} and debuglevel = ${debuglevel}" />
+    <javac srcdir="${src}" destdir="${build}" debug="${debug}" debuglevel="${debuglevel}">
+        <classpath>
+            <pathelement location="lib/servlet.jar"/>
+        </classpath>
+    </javac>
+
+    <rmic classname="org.globalse.arena.server.Arena" base="${build}"/>
+    <rmic classname="org.globalse.arena.server.League" base="${build}"/>
+    <rmic classname="org.globalse.arena.server.Tournament" base="${build}"/>
+    <rmic classname="org.globalse.arena.server.Round" base="${build}"/>
+    <rmic classname="org.globalse.arena.server.Match" base="${build}"/>
+    <rmic classname="org.globalse.arena.gamepeer.GamePeer" base="${build}"/>
+    <rmic classname="org.globalse.arena.matchfrontend.ArenaListenerAdapter" base="${build}"/>
+    <rmic classname="org.globalse.arena.matchfrontend.MatchListenerAdapter" base="${build}"/>
+
+    <copy file="${src}/arena.properties" tofile="${build}/arena.properties"/>
+    <copy file="${src}/matchfrontend.properties" tofile="${build}/matchfrontend.properties"/>
+  </target>
+
+  <target name="dist" depends="compile"
+        description="generate the distribution" >
+    <!-- Create the distribution directory -->
+    <mkdir dir="${dist}"/>
+    <mkdir dir="${dist}/bin"/>
+    <mkdir dir="${dist}/lib"/>
+    <mkdir dir="${dist}/logs"/>
+    <mkdir dir="${dist}/store"/>
+    <mkdir dir="${dist}/conf"/>
+
+    <copy todir="${dist}/defaultroot">
+        <fileset dir="etc/defaultroot"/>
+    </copy>
+
+    <!-- Put all arena classes in arena.jar -->
+    <jar jarfile="${dist}/lib/arena.jar" basedir="${build}">
+      <exclude name="**/ttt/**" />
+      <exclude name="**/styles/**" />
+    </jar>
+    <jar jarfile="${dist}/lib/tictactoe.jar" basedir="${build}">
+      <include name="**/ttt/**" />
+    </jar>
+    <jar jarfile="${dist}/lib/styles.jar" basedir="${build}">
+      <include name="**/styles/**" />
+    </jar>
+
+    <copy todir="${dist}/lib/">
+	<fileset dir="lib">
+		<include name="**/*.jar"/>
+        </fileset>
+    </copy>
+    <copy file="${dist}/lib/arena.jar" tofile="${dist}/defaultroot/arena.jar"/>
+    <copy file="etc/arena.bat" tofile="${dist}/bin/arena.bat"/>
+    <copy file="etc/matchfrontend.bat" tofile="${dist}/bin/matchfrontend.bat"/>    
+    <copy file="etc/lcp.bat" tofile="${dist}/bin/lcp.bat"/>
+    <copy file="etc/arena" tofile="${dist}/bin/arena"/>
+    <copy file="etc/gamepeer" tofile="${dist}/bin/gamepeer"/>
+    <copy file="etc/matchfrontend" tofile="${dist}/bin/matchfrontend"/>
+    <chmod dir="${dist}/bin" perm="ugo+rx" includes="**/*"/>
+    <chmod dir="${dist}/bin" perm="ugo+rx" includes="**/*.*"/>
+    <copy file="${build}/arena.properties" tofile="${dist}/conf/arena.properties"/>
+    <copy file="${build}/matchfrontend.properties" tofile="${dist}/conf/matchfrontend.properties"/>
+    <copy todir="${dist}/defaultroot/WEB-INF/lib">
+        <fileset dir="${dist}/lib">
+            <exclude name="servlet.jar"/>
+        </fileset>
+    </copy>
+    <copy file="${src}/matchfrontend.properties" tofile="${dist}/defaultroot/matchfrontend.properties"/>
+    
+    <war destfile="${dist}/arena.war"
+         webxml="${dist}/defaultroot/WEB-INF/web.xml">
+        <lib dir="${dist}/defaultroot/WEB-INF/lib"/>
+        <zipfileset dir="${dist}/defaultroot/">
+            <include name="*.gif"/>
+	    <include name="*.jnlp"/>
+	    <include name="*.jar"/>
+	    <include name="*.properties"/>
+        </zipfileset>
+    </war>
+  </target>
+
+  <target name="clean"
+        description="clean up" >
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+  </target>
+  
+  <target name="doc"
+        description="javac doc api" >
+  	<javadoc packagenames="org.globalse.arena.*"
+    	     sourcepath="${src}"
+       	     defaultexcludes="yes"
+       	     destdir="doc/api"
+       	     author="true"
+       	     version="true"
+       	     use="true"
+           windowtitle="ARENA API">
+    	<doctitle><![CDATA[<h1>ARENA</h1>]]></doctitle>
+    	<bottom><![CDATA[<i>Copyright &#169; 2004 TUM. All Rights Reserved.</i>]]></bottom>
+        <classpath>
+            <pathelement location="lib/servlet.jar"/>
+        </classpath>
+  	</javadoc>
+  </target>
+  
+  <target name="runServer" depends="dist"
+        description="Starts ARENA Server" >
+       <java classname="org.globalse.arena.server.StartArena"
+       		dir="${dist}/lib" fork="true">
+         <arg value="${dist}/conf/arena.properties"/>
+         <classpath>
+            <fileset dir="${dist}/lib">
+               <include name="**/*.jar"/>
+             </fileset>
+           <pathelement path="${java.class.path}"/>
+         </classpath>
+       	
+       </java>
+  </target>
+	
+	  <target name="runMatchfrontEnd" depends="dist"
+	        description="Starts ARENA MatchfrontEnd" >
+	       <java classname="org.globalse.arena.matchfrontend.MatchFrontEnd"
+	       		fork="true">
+	         <arg value="${dist}/conf/matchfrontend.properties"/>
+	         <classpath>
+	            <fileset dir="${dist}/lib">
+	               <include name="**/*.jar"/>
+	             </fileset>
+	           <pathelement path="${java.class.path}"/>
+	         </classpath>
+	       </java>
+	  </target>
+	
+</project>

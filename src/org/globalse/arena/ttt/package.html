@@ -1,0 +1,27 @@
+<HTML><HEAD><TITLE>Example Game Tic Tac Toe (org.globalse.arena.ttt)</TITLE></HEAD>
+
+<BODY bgColor=white>
+<P>
+This package contains a sample game implementation. Minimally, a game needs
+to provide the following classes:
+
+<UL>
+<LI>A concrete implementation of the {@link org.globalse.arena.server.Game Game} interface (TicTacToe). This class
+defines basic properties of the game, such as the number of players per match, and
+acts as a concrete factory for creating {@link org.globalse.arena.server.Match Matches} and Statistics.</LI>
+<LI>A concrete implementation of the Match class (TicTacToeMatch). This class
+tracks the progress of a match, receives game moves, and broadcasts notification events to
+connected players and specators. The TicTacToeMatch class relies heavily on its super class
+for most of these tasks and focuses mostly on the tic tac toe specifics.</LI>
+<LI>A match panel for viewing matches (TicTacToeMatchPanel). This class is loaded in the
+match front end and interacts with the TicTacToeMatch with the Match.playMove method.</LI>
+<LI>A mathc panel factory for creating match panels.</LI>
+</UL>
+
+When using the arena play move method for communicating between the match panel and the match
+classes, the game should also provide a concrete implementation of {@link org.globalse.arena.remote.Move}.</UL>
+</P>
+
+</BODY>
+</HTML>
+

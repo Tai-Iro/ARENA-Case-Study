@@ -1,0 +1,20 @@
+<HTML><HEAD><TITLE>Match Front End (org.globalse.arena.matchfrontend)</TITLE></HEAD>
+
+<BODY bgColor=white>
+<P>
+This package contains the game-independent classes of the match front end. The match front
+end is a swing client, run either as a standalone application or with java web start,
+providing access to the player and spectator to matches in progress. A match front end is
+started using the {@link org.globalse.arena.matchfrontend.MatchFrontEnd MatchFrontEnd} class.
+</P>
+<P>
+The match front end relies on {$link org.globalse.arena.matchfrontend.MatchPanelFactory MatchPanelFactories}
+registered with the arena server for creating game-specific match panels. The game-specific classes
+must be either available in the class path or from a codebase.
+</P>
+
+<P>For example of a game-specific match panel, see {@link org.globalse.arena.ttt.TicTacToeMatchPanel}.
+</P>
+</BODY>
+</HTML>
+

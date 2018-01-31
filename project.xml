@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <!-- the version of maven's project object model -->
+  <pomVersion>3</pomVersion>
+  
+  <!-- a unique name for this project -->
+  <id>arena</id>
+  <artifactId>arena</artifactId>
+  <groupId>arena</groupId>
+  
+  <!-- a short but descriptive name for the project -->
+  <name>ARENA</name>
+
+  <!-- The version of the project under development, e.g.
+       1.1, 1.2, 2.0-SNAPSHOT -->
+  <currentVersion>0.9</currentVersion>
+
+  <!-- details about the organization that 'owns' the project -->
+  <organization>
+    <name>Bernd Bruegge &amp; Allen H. Dutoit</name>
+    <url>http://wwwbruegge.in.tum.de/</url>
+    <logo>/images/ase_logo.gif</logo>
+  </organization>
+  
+  <!-- the year the project started -->
+  <inceptionYear>2004</inceptionYear>
+  <package>org.globalse.arena</package>
+  <logo>/images/arena.gif</logo>
+  <description>ARENA</description>
+  
+  <!-- a short description of what the project does -->
+  <shortDescription>ARENA</shortDescription>
+  
+  <!-- the project home page -->
+  <url>http://sysiphus.informatik.tu-muenchen.de/arena</url>
+  <siteAddress>sysiphus.informatik.tu-muenchen.de</siteAddress>
+  <siteDirectory>/Users/wwwsysiphus/www/arena</siteDirectory>
+
+  <!-- the version control repository and http url for online access
+       the connection element has the form:
+       scm:<system>:<system specific connection string> -->
+  <repository>
+    <connection>scm|svn|http://wwwbruegge.in.tum.de/repos/oose/trunk/examples/arena</connection>
+    <developerConnection>scm|svn|http://wwwbruegge.in.tum.de/repos/oose/trunk/examples/arena</developerConnection>
+    <url>http://wwwbruegge.in.tum.de/repos/oose/trunk/examples/arena</url>
+  </repository>
+
+  <!-- who the developers are for the project -->
+  <developers>
+    <developer>
+      <name>Allen Dutoit</name>
+      <id>dutoit</id>
+      <email>dutoit@in.tum.de</email>
+      <organization>Technische Universität München</organization>
+      <roles>
+        <role>Architect</role>
+        <role>Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Michael Nagel</name>
+      <id>nagel</id>
+      <email>nagel@in.tum.de</email>
+      <organization>Technische Universität München</organization>
+      <roles>
+        <role>Architect</role>      
+        <role>Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Timo Wolf</name>
+      <id>wolft</id>
+      <email>wolft@in.tum.de</email>
+      <organization>Technische Universität München</organization>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+  </developers>
+  
+  <contributors>
+    <contributor>
+      <name>Prof. Bernd Brügge, Ph.D.</name>
+      <id>bruegge</id>      
+      <email>bruegge@in.tum.de</email>
+      <organization>Technische Universität München</organization>
+    </contributor>
+  </contributors> 
+
+  <!-- jar files the project is dependent on -->
+  <dependencies>
+    <dependency>
+      <groupId>servletapi</groupId>
+      <artifactId>servletapi</artifactId>
+      <version>2.3</version>
+      <url>http://java.sun.com/products/servlet/</url>
+      <type>jar</type>
+    </dependency>
+  </dependencies>
+
+  <!-- build information for the project -->
+  <build>
+    <nagEmailAddress>dutoit@in.tum.de</nagEmailAddress>
+    <sourceDirectory>src</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>src</directory>
+        <includes>
+          <include>**/*.properties</include>
+          <include>**/*.gif</include>
+        </includes>
+      </resource>
+    </resources>
+  </build>
+    
+  <reports>
+    <report>maven-license-plugin</report>  
+    <report>maven-changelog-plugin</report>
+    <report>maven-developer-activity-plugin</report>
+    <report>maven-file-activity-plugin</report>
+    <report>maven-javadoc-plugin</report>
+    <report>maven-jxr-plugin</report>
+<!--    <report>maven-sysiphusreport-plugin</report>    -->
+    <!--report>maven-jdepend-plugin</report-->
+  </reports>  
+
+</project>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project default="all"
+  xmlns:i="jelly:interaction"
+  xmlns:j="jelly:core"
+  xmlns:m="jelly:maven">
+
+  <goal name="all">
+    <attainGoal name="clean" />
+    <attainGoal name="jar"/>
+    <attainGoal name="tarsrc"/>
+    <attainGoal name="site" />
+<!--    <attainGoal name="pdf"/>    -->
+  </goal>
+  
+  <goal name="deploy-site">
+      <attainGoal name="all" />
+      <attainGoal name="site:sshdeploy" />
+  </goal>
+  
+  <goal name="tarsrc">
+    <property name="tarBase" value="xdocs/downloads/arena"/>
+
+    <delete dir="${tarBase}"/>
+    <mkdir dir="${tarBase}"/>
+
+    <copy todir="${tarBase}/src">
+      <fileset dir="src">
+   		<exclude name="**/*.svn"/>
+   		<exclude name="**/CVS"/>
+      </fileset>
+    </copy>
+    <copy todir="${tarBase}/etc">
+      <fileset dir="etc">
+   		<exclude name="**/*.svn"/>
+   		<exclude name="**/CVS"/>
+      </fileset>
+    </copy>
+    <copy todir="${tarBase}/lib">
+      <fileset dir="lib">
+   		<exclude name="**/*.svn"/>
+   		<exclude name="**/CVS"/>
+      </fileset>
+    </copy>
+    <copy todir="${tarBase}/doc">
+      <fileset dir="doc">
+   		<exclude name="**/*.svn"/>
+   		<exclude name="**/CVS"/>
+      </fileset>
+    </copy>
+	<copy file="AUTHORS.txt" tofile="${tarBase}/AUTHORS.txt"/>
+	<copy file="build.xml" tofile="${tarBase}/build.xml"/>
+	<copy file="LICENSE.txt" tofile="${tarBase}/LICENSE.txt"/>
+    
+    <tar longfile="gnu" tarfile="xdocs/downloads/arena.tar">
+      <tarfileset dir="${tarBase}">
+      </tarfileset>
+    </tar>
+
+    <gzip zipfile="xdocs/downloads/arena.tar.gz" src="xdocs/downloads/arena.tar"/>
+    <delete file="xdocs/downloads/arena.tar"/>
+    <zip zipfile="xdocs/downloads/arena.zip">
+      <zipfileset dir="${tarBase}"/>
+    </zip>
+    
+    <delete dir="${tarBase}"/>    
+  </goal>
+</project>

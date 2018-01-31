@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <title>ARENA Downloads</title>
+    <author email="wolft@in.tum.de">Timo Wolf</author>
+  </properties>
+
+  <body>
+    <section name="Downloads">
+        <table>
+          <tr>
+            <th>Document</th>
+            <th>Description</th>
+            <th>Size</th>
+          </tr>
+          <tr>
+            <td><a href="arena.tar.gz">arena.tar.gz</a></td>
+            <td>The current source code of ARENA</td>
+            <td>140 kb</td>
+          </tr>
+          <tr>
+            <td><a href="arena.zip">arena.zip</a></td>
+            <td>The current source code of ARENA</td>
+            <td>200 kb</td>
+          </tr>          
+        </table>
+    </section>
+  </body>
+</document>

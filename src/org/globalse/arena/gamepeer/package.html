@@ -1,0 +1,23 @@
+<HTML><HEAD><TITLE>Game Peer (org.globalse.arena.gamepeer)</TITLE></HEAD>
+
+<BODY bgColor=white>
+<P>
+This package contains the classes for starting and running game peers. A game peer is a
+remote object providing the arena server with access to additional computing
+resources for running matches.
+</P>
+<P>An operator adds a game peer to an arena by
+starting a game peer on the host whose resources should be made available (see {@link
+org.globalse.arena.gamepeer.StartGamePeer StartGamePeer}). The hostname, port, and
+operator password of the arena server are
+specified in a properties file. Once successful registration
+of the game peer, the arena server requests the creation of new matches from
+the game peer when planning new rounds.
+</P>
+
+<P>On the arena server, the {@link org.globalse.arena.server.GamePeerManager} class
+is responsible for tracking game peers and allocating matches to game peers.
+</P>
+</BODY>
+</HTML>
+

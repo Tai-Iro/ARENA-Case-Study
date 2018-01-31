@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <title>ARENA</title>
+    <author email="dutoit@in.tum.de">Allen Dutoit</author>
+  </properties>
+
+  <body>
+    <section name="ARENA">
+      <subsection name="About ARENA">
+
+      <p>ARENA is a distributed, multi-user system for organizing and conducting tournaments.</p>
+
+      <p>ARENA is game independent in the sense that organizers can adapt a new game to the ARENA game interface, upload it to the ARENA server, and announce and conduct tournaments with players and spectators located anywhere on the Internet. Organizers can also define new tournament styles, describing how players are mapped to a set of matches and how to compute an overall ranking of players by adding up their victories and losses (and hence, figuring out who won the tournament).</p>
+
+      <p>ARENA has been developed as a companion example for the book <a href="http://oose.globalse.org/">Object-Oriented Software Engineering</a>. Our goal is to provide a non-trivial and living example for software engineering education. With ARENA, an instructor can cover technical topics (e.g., access control, concurrency control, dynamic class loading), and methodological topics (e.g applying design patterns, specifying contracts). ARENA can also be used for supporting project courses in which students extend or refine the system.</p>
+      </subsection>
+
+      <subsection name="Status">
+      <p>ARENA is currently under construction. A skeleton architectural prototype has been completed, including dynamic loading of games, tournament styles across distributed match front ends and game peers. A demo scenario can be played in which five predefined users can play a knock out tournament until its completion.</p>
+      <p>To be completed in the near term are:
+         <ul>
+            <li>web interface to the arena server</li>
+            <li>storage subsystem</li>
+            <li>round robin tournament style</li>
+            <li>statistics subsystem</li>
+         </ul>
+      </p>
+      </subsection>
+
+      <subsection name="License">
+      <p>ARENA is free software; you can redistribute it and/or modify it under the terms of the <a href="license.html">GNU General Public License</a> as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.</p>
+
+      <p>ARENA is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the <a href="license.html">GNU General Public License</a> for more details.</p>
+      </subsection>
+    </section>
+  </body>
+</document>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+      <!-- JNLP File for launching ARENA MatchFrontEnd with WebStart -->
+      <jnlp
+        spec="1.0+"
+        codebase="http://localhost:8080/arena/"
+        href="matchfrontend.jnlp">
+        <information>
+          <title>ARENA MatchFrontEnd Latest Stable Release</title>
+          <vendor>GlobalSE</vendor>
+          <homepage href="http://oose.globalse.org/"/>
+          <description>Arena Match Front End Application</description>
+          <description kind="short">ARENA version 1.0</description>
+          <icon href="http://localhost:8080/arena/arena.png"/>
+          <offline-allowed/>
+        </information>
+<!--
+        <security>
+            <all-permissions/>
+        </security>
+-->
+        <resources>
+          <j2se version="1.4 1.4.0-beta3 1.4.0-beta2 1.4.1 1.4.2 1.3 1.2"/>
+          <jar href="arena.jar" main="true" download="eager"/>
+        </resources>
+        <application-desc main-class="org.globalse.arena.matchfrontend.MatchFrontEnd">
+            <argument>http://localhost:8080/arena/matchfrontend.properties</argument>
+            <argument>ticket</argument>
+            <argument>matchid</argument>
+        </application-desc>
+      </jnlp>

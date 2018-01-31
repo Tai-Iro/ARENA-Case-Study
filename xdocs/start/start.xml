@@ -1,0 +1,185 @@
+<?xml version="1.0"?>
+<document>
+	<properties>
+		<title>Getting Started--Starting ARENA</title> 
+		<author email="dutoit@in.tum.de">
+			Allen Dutoit
+		</author>
+	</properties>
+<body>
+	<section name="Getting Started--Starting ARENA">
+		<p>
+			ARENA has been designed so that it can be started in different configurations of increasing complexity: 
+			<ul>
+				<li>
+					A <a href="#Start_a_demo_server">demo server</a> allows new developers to become familiar with the concepts of ARENA in its simplest configuration. In demo mode, the arena server creates built in player accounts, leagues, and tournaments. All components are run on a single host, enabling the student to modify, recompile, and test arena quickly and debug basic issues.
+				</li>
+				<li>
+					<a href="#Start_a_game_peer">Game peers</a> enable ARENA to scale to larger number of concurrent tournaments and players. The arena server delegates the creation of matches to game peers, which are processes located on remote machines. This configuration enables new developers to examine more complex issues, such as synchronizing classes distributed across different hosts or dealing with failures.
+				</li>
+				<li>
+					<a href="#Enable_dynamic_loading_of_game_classes">Remote dynamic loading</a> enables the arena server, game peers, and match front ends to download game specific files from a web server. By default, this feature is off to simplify the debugging of new games. In a deployment environment, however, it simplifies the distribution of game-specific classes to match front ends and game peers running on different hosts.
+				</li>
+			</ul>
+		</p>
+		<subsection name="Download and compile ARENA">
+			<p>
+				The steps described below assume that you already <a href="../downloads/index.html">downloaded</a> and unpacked the ARENA source code and that the current directory is the top directory of the distribution (i.e., the directory containing <code>LICENSE.txt</code>).
+			</p>
+			<p>
+				To compile ARENA, invoke <code>ant</code> in the top directory. This will create a subdirectory called <code>dist</code> containing all the files necessary for starting a simple arena with a tic tac toe game.
+			</p>
+			<p>
+				In particular, you need to be aware of the following files in the <code>./dist</code> directory: 
+				<ul>
+					<li>
+						<code>./dist/bin/arena</code> -- a shell script for starting the arena server
+					</li>
+					<li>
+						<code>./dist/conf/arena.properties</code> -- a properties file for configuring the arena server
+					</li>
+					<li>
+						<code>./dist/bin/matchfrontend</code> -- a shell script for starting a match front end
+					</li>
+					<li>
+						<code>./dist/conf/matchfrontend.properties</code> -- a properties file for configuring the match front ends
+					</li>
+					<li>
+						<code>./dist/bin/gamepeer</code> -- a shell script for starting a game peer; the game peer reads properties from the same file as the arena server
+					</li>
+				</ul>
+			</p>
+		</subsection>
+		<subsection name="Start a demo server">
+			<p>
+				With the default properties file, the arena server includes a single game (TicTacToe), five users (alice, bob, joe, mark, mary), and two leagues (Expert TicTacToe League and Novice TicTacToe League). The demo user passwords are constructed by appending "pass" to the user name (e.g., alicepass). Only alice and joe have access to the expert league as players. Bob is the league owner of both leagues and can accept or reject players.
+			</p>
+			<p>
+				To start the demo server, first set your current directory to the top directory of the source code distribution, for example:
+			</p>
+			<source>
+cd /home/dutoit/arena/
+			</source>
+			<p>
+				Next, start the arena server.
+			</p>
+			<source>
+./dist/bin/arena &amp;
+			</source>
+			<p>
+				Start a match front end. When prompted for a user name, use "alice", "alicepass". Expand the Expert TicTacToe League and the 2003 Championship, select the "alice vs. joe" match, and click "Play".
+			</p>
+			<source>
+./dist/bin/matchfrontend &amp;
+			</source>
+			<img src="../images/leaguesframe.gif" /> 
+			<p>
+				Start a second match front end, this time for the user "joe", "joepass", select the same match and click play. The match has now started since both players joined; use the TicTacToe match panels to play the match to its conclusion.
+			</p>
+			<img src="../images/tictactoepanel.gif" /> 
+			<p>
+				At the end of the match, the tournament displays the player ranks.
+			</p>
+			<img src="../images/tournamentend.gif" /> 
+		</subsection>
+		<subsection name="Start a demo server with another game">
+			<p>
+				The demo setup can also be used when developing new games. This provides a quick setup for debugging basic functionality and shortens debug cycles by avoiding the manual creation of league, tournament, and match objects. To start an arena server with your own game, you need to do the following:
+			</p>
+			<ol>
+				<li>
+					Develop game-specific implementations of Game (e.g., <code>org.myorg.mygame.MyGame</code>), Match, MatchPanel, and MatchPanelFactory (e.g., <code>org.myorg.mygame.MyGameMatchPanelFactory</code>), as discussed in <a href="addgame.html">Developing and Adding a New Game</a>.
+				</li>
+				<li>
+					Put all your game-specific class files in a jar file (e.g., <code>mygame.jar</code>)
+				</li>
+				<li>
+					Copy the jar file in the directory <code>./dist/lib</code>
+				</li>
+				<li>
+					In <code>./dist/conf/arena.properties</code>, add your game class name (e.g., <code>org.myorg.mygame.MyGame</code>) to the list of <code>Games</code>
+				</li>
+				<li>
+					Set the name, description, and match panel factory for your game
+				</li>
+				<li>
+					Set the demo game to the name of your game
+				</li>
+			</ol>
+			<source>
+# arena.properties file for a new custom game using the demo setup 
+Games=org.globalse.arena.ttt.TicTacToe org.myorg.mygame.MyGame
+
+# TicTacToe configuration
+org.globalse.arena.ttt.TicTacToe.name=TicTacToe 
+org.globalse.arena.ttt.TicTacToe.description=The classic 2 player 3x3 board game 
+org.globalse.arena.ttt.TicTacToe.factory=org.globalse.arena.ttt.TicTacToeMatchPanelFactory
+
+# MyGame configuration
+org.myorg.mygame.MyGame.name=MyGame 
+org.myorg.mygame.MyGame.description=This is a simple game I wrote to learn how to use ARENA. 
+org.myorg.mygame.MyGame.factory=org.myorg.mygame.MyGameMatchPanelFactory 
+
+DemoGameName=MyGame 
+			</source>
+			<p>
+				Start the arena server and match front ends as in the previous section.
+			</p>
+		</subsection>
+		<subsection name="Start a game peer">
+			<p>
+				A nonfunctional requirement of ARENA is to scale with the number of concurrent tournaments and users. To meet this requirement, an arbitrary number of game peers are started, each on a differnt host, to provide additional computing resources for running matches.
+			</p>
+			<p>
+				Game peers are started after the arena server and authenticate to the arena server using the operator user name and password. Arena may then choose later to use the game peer resources and delegate the creation and running of a match to a specific game peer. After players join the match, the match front ends communicate directly with the relevant game peer, relieving the arena server of the corresponding communication and processing load.
+			</p>
+			<p>
+				When no game peers are currently registered with the arena, the arena server simply creates the match locally.
+			</p>
+			<p>
+				To start a game peer, make sure first that the arena server hostname, port number, operator name, and password are set correctly in the arena.properties file.
+			</p>
+			<p>
+				<b>Note:</b>The hostname and port number refer to the arena server, not that of the game peer.
+			</p>
+			<source>
+ArenaHost=arena.myorg.org
+ArenaPort=1099
+Operator=operator
+OperatorPassword=a_random_password_1234 
+			</source>
+			<p>
+				Next, copy the dist directory to the game peer host whose resources should be made available to the arena and start the game peer.
+			</p>
+			<source>
+./dist/bin/gamepeer
+			</source>
+		</subsection>
+		<subsection name="Enable dynamic loading of game classes">
+			<p>
+				When match front ends and game peers are installed on several hosts, keeping consistency across installations becomes difficult, especially with respect to game-specific classes.
+			</p>
+			<p>
+				Arena uses the RMI remote class loading mechanism for game classes that it cannot find in the class path. There are few simple steps for configuring a codebase, however, all of them must be correct for the remote class loading to work correctly:
+			</p>
+			<ul>
+				<li>
+					The game classes to be remotely loaded should <b>not</b> be in the class path of any of the processes involved (i.e., match front ends, arena server, and game peers). This includes removing any jar files related to the game from the <code>./dist/lib/</code> directory.
+				</li>
+				<li>
+					A web server accessible to the arena server should server the class files, preferably as jar files, without password.
+				</li>
+				<li>
+					The web server should be started before the arena server.
+				</li>
+				<li>
+					The complete URLs to the jar files should be specified in the <code>CodeBase</code> property in the <code>./dist/conf/arena.properties</code> file. If more than one jar file is involved, the <code>CodeBase</code> should be a space-separated list of URLs.
+				</li>
+			</ul>
+			<p>
+				An incorrectly configured codebase can result in a range of errors, including UnMarshallingExceptions, ClassNotFoundExceptions, or an intelligible message from the arena server.
+			</p>
+		</subsection>
+	</section>
+	</body>
+</document>

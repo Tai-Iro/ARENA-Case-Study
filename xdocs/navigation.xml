@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="ARENA">
+
+  <title>ARENA</title>
+
+  <body>
+    <links>
+      <item name="PDF Documentation" href="/arena.pdf"   img="/images/pdf.gif"/>
+    </links>
+  
+   <menu name="Getting Started">
+      <item name="Downloading ARENA"              href="/downloads/index.html"/>
+      <item name="Starting ARENA"              href="/start/start.html"/>
+      <item name="Developing a New Game"               href="/start/addgame.html"/>
+    </menu>
+    
+    <menu name="" type="footer"></menu>
+  </body>
+</project>

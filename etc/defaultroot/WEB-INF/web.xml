@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
+    "http://java.sun.com/j2ee/dtds/web-app_2_2.dtd">
+
+<web-app>
+  <context-param>
+    <param-name>arenaHost</param-name>
+    <param-value>localhost</param-value>
+  </context-param>
+  <context-param>
+    <param-name>arenaServerPort</param-name>
+    <param-value>1099</param-value>
+  </context-param>
+  <context-param>
+    <param-name>codebase</param-name>
+    <param-value>http://localhost:8080/arena/</param-value>
+  </context-param>
+
+  <servlet>
+    <servlet-name>Controller</servlet-name>
+    <description>The front controller servlet</description>
+    <servlet-class>org.globalse.arena.web.Controller</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Controller</servlet-name>
+    <url-pattern>/Controller</url-pattern>
+  </servlet-mapping>
+</web-app>
